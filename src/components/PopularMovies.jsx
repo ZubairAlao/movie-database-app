@@ -38,13 +38,6 @@ export default function PopularMovies() {
 
   const isMobile = window.innerWidth <= 968;
   const perPage = isMobile ? 3 : 6;
-  const formattedReleaseDate = new Date(movie.release_date).toLocaleDateString('en-US', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  });
-
-  const percentageScore = Math.round((movie.vote_average/10) * 100)
 
   return (
     <Box px={8} maxWidth="100%">
@@ -59,33 +52,20 @@ export default function PopularMovies() {
     }}
   >
     {movieData ? (
-  movieData.map((movie) => {
-    const formattedReleaseDate = new Date(movie.release_date).toLocaleDateString('en-US', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    });
-
-    const percentageScore = Math.round((movie.vote_average / 10) * 100);
-
-    return (
-      <SplideSlide key={movie.id}>
-        {movie && (
+      movieData.map((movie) => (
+        <SplideSlide key={movie.id}>
           <Card
             imageSrc={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
             title={movie.title}
-            releaseDate={formattedReleaseDate}
-            ratings={percentageScore}
+            releaseDate={movie.release_date}
+            ratings={movie.vote_average}
             link={`movie/${movie.id}`}
           />
-        )}
-      </SplideSlide>
-    );
-  })
-) : (
-  <p>Loading movie data...</p>
-)}
-
+        </SplideSlide>
+      ))
+    ) : (
+      <p>Loading movie data...</p>
+    )}
   </Splide>
 </Box>
   );
