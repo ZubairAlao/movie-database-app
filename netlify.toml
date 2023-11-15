@@ -1,10 +1,11 @@
 # netlify.toml
 
 [build]
-command = "npm run build"  # Replace with your build command
-publish = "build"         # Replace with your build output directory
+command = "yarn build"  # Use 'yarn' instead of 'npm' if you are using Yarn
+publish = "build"
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
