@@ -1,8 +1,8 @@
 # netlify.toml
 
 [build]
-command = "yarn build"  # Use 'yarn' instead of 'npm' if you are using Yarn
-publish = "build"
+command = "yarn build"  
+publish = "dist"
 
 [[redirects]]
   from = "/*"
