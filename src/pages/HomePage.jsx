@@ -52,8 +52,8 @@ export default function LandingPage() {
         minHeight="60%"
         justifyContent="start"
       >
-        {movieData && movieData.results ? (
-          movieData.results.slice(0, 3).map(movie => (
+        {movieData ? (
+          movieData.slice(0, 3).map(movie => (
             <Box
               key={movie.id}
               style={{ flex: '0 0 33.33%', marginRight: '0', padding: 0 }}

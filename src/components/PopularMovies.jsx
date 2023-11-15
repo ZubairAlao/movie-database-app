@@ -52,7 +52,7 @@ export default function PopularMovies() {
     }}
   >
     {movieData ? (
-      movieData.results.map((movie) => (
+      movieData.map((movie) => (
         <SplideSlide key={movie.id}>
           <Card
             imageSrc={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
