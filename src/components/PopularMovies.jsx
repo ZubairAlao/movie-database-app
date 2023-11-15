@@ -37,7 +37,14 @@ export default function PopularMovies() {
   }, []);
 
   const isMobile = window.innerWidth <= 968;
-  const perPage = isMobile ? 3 : 6; 
+  const perPage = isMobile ? 3 : 6;
+  const formattedReleaseDate = new Date(movie.release_date).toLocaleDateString('en-US', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+
+  const percentageScore = Math.round((movie.vote_average/10) * 100)
 
   return (
     <Box px={8} maxWidth="100%">
@@ -57,8 +64,8 @@ export default function PopularMovies() {
           <Card
             imageSrc={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
             title={movie.title}
-            releaseDate={movie.release_date}
-            ratings={movie.vote_average}
+            releaseDate={formattedReleaseDate}
+            ratings={percentageScore}
             link={`movie/${movie.id}`}
           />
         </SplideSlide>
