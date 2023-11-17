@@ -32,19 +32,20 @@ export default function SearchBar() {
   const inputColor = useColorModeValue('#333333', '#FFFFFF')
 
   return (
-  <Box position="relative">
+  <Box >
       <IconButton
         icon={<FontAwesomeIcon icon={faSearch} />}
         onClick={toggleSearch}
         aria-label="Search"
         variant="ghost"
+        position="relative"
       />
 
-      <Collapse in={isOpen}  style={{ position: "absolute", top: "50px", right: "110px", zIndex: 2, width: "300px", maxWidth: "800px", background:"white", color: "black" }}>
+      <Collapse in={isOpen}  style={{ position: "absolute", top: "67px", right: "0", zIndex: 2, width: "100%", background:"white", color: "black" }}>
         <form onSubmit={submitHandler}>
           <Input
-            onChange={(e) => setInput(e.target.value)} 
-            placeholder="Search Moviess..."
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Search Movies, Tvs and People"
             type='text'
             value={input}
             size="lg"

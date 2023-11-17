@@ -52,17 +52,26 @@ export default function PopularMovies() {
     }}
   >
     {movieData ? (
-      movieData.map((movie) => (
+      movieData.map((movie) => {
+        const formattedReleaseDate = new Date(movie.release_date).toLocaleDateString('en-US', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+        });
+
+        const percentageScore = Math.round((movie.vote_average/10) * 100)
+        return (
         <SplideSlide key={movie.id}>
           <Card
             imageSrc={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
             title={movie.title}
-            releaseDate={movie.release_date}
-            ratings={movie.vote_average}
+            releaseDate={formattedReleaseDate}
+            ratings={percentageScore + '%'}
             link={`movie/${movie.id}`}
           />
         </SplideSlide>
-      ))
+        );
+      })
     ) : (
       <p>Loading movie data...</p>
     )}

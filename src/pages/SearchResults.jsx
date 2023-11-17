@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'; // Import useState and useEffect
+import React, { useState, useEffect } from 'react'; 
 import { Link } from 'react-router-dom';
 import { fetchSearchedMedia } from '../api';
 import {
@@ -52,6 +52,8 @@ export default function SearchResults() {
           onClick={() => setActiveSection('movies')}
           variant={activeSection === 'movies' ? 'solid' : 'outline'}
           mr={2}
+          mb={8}
+          
         >
           Movies
         </Button>
@@ -59,45 +61,44 @@ export default function SearchResults() {
           onClick={() => setActiveSection('tvShows')}
           variant={activeSection === 'tvShows' ? 'solid' : 'outline'}
           mr={2}
+          mb={8}
         >
           TV Shows
         </Button>
         <Button
           onClick={() => setActiveSection('people')}
           variant={activeSection === 'people' ? 'solid' : 'outline'}
+          mb={8}
         >
           People
         </Button>
         {activeSection === 'movies' ? (
           searchedMovies.map((movie) => (
-            <Link to={`/movie/${movie.id}`} key={movie.id}>
-              <Card
+              <Card key={movie.id}
                 imageSrc={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                 title={movie.title}
                 releaseDate={movie.release_date}
                 ratings={Math.round((movie.vote_average / 10) * 100) + "%"}
+                link={`/movie/${movie.id}`}
               />
-            </Link>
           ))
         ) : activeSection === 'tvShows' ? (
           searchedTVShows.map((tvShow) => (
-            <Link to={`/tv/${tvShow.id}`} key={tvShow.id}>
-              <Card
+              <Card key={tvShow.id}
                 imageSrc={`https://image.tmdb.org/t/p/w500${tvShow.poster_path}`}
                 title={tvShow.name}
                 releaseDate={tvShow.first_air_date}
                 ratings={Math.round((tvShow.vote_average / 10) * 100) + "%"}
+                link={`/tv/${tvShow.id}`}
               />
-            </Link>
           ))
         ) : activeSection === 'people' ? (
           searchedPeople.map((person) => (
-            <Link to={`/people/${person.id}`} key={person.id}>
-              <Card
+              <Card key={person.id}
                 imageSrc={`https://image.tmdb.org/t/p/w500${person.profile_path}`}
                 title={person.name}
+                link={`/people/${person.id}`}
               />
-            </Link>
           ))
         ) : (
           <p>Loading media data...</p>

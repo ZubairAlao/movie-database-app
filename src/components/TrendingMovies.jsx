@@ -16,21 +16,11 @@ export default function TrendingMovies() {
   const [selectedTimePeriod, setSelectedTimePeriod] = useState('week');
 
   useEffect(() => {
-    // Use localStorage to check for and retrieve cached movie data
-    const cachedMovieData = localStorage.getItem("trendingMovieData");
-    if (cachedMovieData) {
-      setMovieData(JSON.parse(cachedMovieData));
-      console.log(movieData);
-    }
-
-    // Fetch and cache movie data if not found in localStorage
     async function fetchData() {
       try {
-        if (!cachedMovieData) {
           const data = await fetchMediaData('trendingMovies', selectedTimePeriod);
           localStorage.setItem("trendingMovieData", JSON.stringify(data));
           setMovieData(data);
-        }
       } catch (error) {
         console.error('Error fetching movie data:', error);
       }
@@ -41,6 +31,7 @@ export default function TrendingMovies() {
 
   const isMobile = window.innerWidth <= 968;
   const perPage = isMobile ? 3 : 6;
+  console.log(movieData);
 
 
   return (
@@ -72,19 +63,33 @@ export default function TrendingMovies() {
         }}
       >
         {movieData ? (
-          movieData.map((movie) => (
-            <SplideSlide key={movie.id}>
-              <Card
-                imageSrc={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
-                title={movie.title}
-                name={movie.name}
-                releaseDate={movie.release_date}
-                FirstAirDate={movie.first_air_date}
-                ratings={movie.vote_average}
-                link={movie.media_type === 'movie' ? `movie/${movie.id}` : `tv/${movie.id}`}
-              />
-            </SplideSlide>
-          ))
+          movieData.map((movie) => {
+            const formattedReleaseDate = new Date(movie.release_date).toLocaleDateString('en-US', {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric',
+            });
+
+            const formattedFirstAirDate = new Date(movie.first_air_date).toLocaleDateString('en-US', {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric',
+            });
+    
+            const percentageScore = Math.round((movie.vote_average/10) * 100)
+            return (
+              <SplideSlide key={movie.id}>
+                <Card
+                  imageSrc={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
+                  title={movie.title}
+                  name={movie.name}
+                  releaseDate={movie.media_type === 'movie' ? formattedReleaseDate : formattedFirstAirDate}
+                  ratings={percentageScore + "%"}
+                  link={movie.media_type === 'movie' ? `movie/${movie.id}` : `tv/${movie.id}`}
+                />
+              </SplideSlide>
+            );
+          })
         ) : (
           <p>Loading movie data...</p>
         )}
