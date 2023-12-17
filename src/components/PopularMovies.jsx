@@ -64,7 +64,7 @@ export default function PopularMovies() {
         <SplideSlide key={movie.id}>
           <Card
             imageSrc={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
-            title={movie.title}
+            name={movie.title}
             releaseDate={formattedReleaseDate}
             ratings={percentageScore + '%'}
             link={`movie/${movie.id}`}

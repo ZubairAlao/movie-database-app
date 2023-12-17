@@ -33,7 +33,7 @@ export default function TopRatedTvsPage() {
                     key={movie.id}
                     imageSrc={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                     name={movie.name}
-                    FirstAirDate={formattedReleaseDate}
+                    releaseDate={formattedReleaseDate}
                     ratings={percentageScore + "%"}
                     link={{
                         pathname: `${movie.id}`,

@@ -75,14 +75,13 @@ export default function TrendingMovies() {
               month: 'long',
               year: 'numeric',
             });
-    
             const percentageScore = Math.round((movie.vote_average/10) * 100)
             return (
               <SplideSlide key={movie.id}>
                 <Card
                   imageSrc={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
-                  title={movie.title}
-                  name={movie.name}
+                  name={movie.title || movie.name}
+                  // name={movie.name}
                   releaseDate={movie.media_type === 'movie' ? formattedReleaseDate : formattedFirstAirDate}
                   ratings={percentageScore + "%"}
                   link={movie.media_type === 'movie' ? `movie/${movie.id}` : `tv/${movie.id}`}

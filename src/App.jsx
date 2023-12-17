@@ -21,6 +21,16 @@ import TopRatedTvsPageDetails, { loader as TopRatedTvsPageDetailsLoader } from "
 import PopularPeople, { loader as PopularPeopleLoader } from "./pages/PopularPeople/PopularPeople";
 import PopularPeopleDetails, { loader as PopularPeopleDetailsLoader } from "./pages/PopularPeople/PopularPeopleDetails";
 import SearchResults from "./pages/SearchResults";
+import Register from "./pages/Register";
+import Login, { loader as loginLoader } from "./pages/Login";
+import UserProfileLayout from "./components/UserProfileLayout";
+import UserProfile, {loader as userProfileLoader} from "./pages/UserProfile/UserProfile";
+import UserFavoriteMovies from "./pages/UserProfile/UserFavoriteMovies";
+import UserFavoriteTvs from "./pages/UserProfile/UserFavoriteTvs";
+
+import { requireAuth } from "./utils/authUtils";
+// import { auth } from "./services/firebase";
+
 
 
  const router = createBrowserRouter(createRoutesFromElements(
@@ -30,6 +40,25 @@ import SearchResults from "./pages/SearchResults";
          path="searched/:search"
          element={<SearchResults />}
          errorElement={<Error />}
+      />
+
+      <Route
+         path="register"
+         element={<Register />}
+         errorElement={<Error />}
+      />
+
+      <Route
+         path="register"
+         element={<Register />}
+         errorElement={<Error />}
+      />
+
+      <Route
+         path="login"
+         element={<Login />}
+         errorElement={<Error />}
+         loader={loginLoader}
       />
 
       <Route
@@ -96,6 +125,31 @@ import SearchResults from "./pages/SearchResults";
          errorElement={<Error />}
          loader={PopularPeopleDetailsLoader}
       />
+
+      <Route
+         path="user-profile"
+         element={<UserProfileLayout />}
+      >
+         <Route
+            index
+            element={<UserProfile />}
+            errorElement={<Error />}
+            loader={userProfileLoader}
+         />
+
+         <Route
+            path="user-favorite-movies"
+            element={<UserFavoriteMovies />}
+            errorElement={<Error />}
+            loader={async ({ request }) => { await requireAuth(request); return null; }}
+         />
+         <Route
+            path="user-favorite-tvs"
+            element={<UserFavoriteTvs />}
+            errorElement={<Error />}
+            loader={async ({ request }) => { await requireAuth(request); return null; }}
+         />
+      </Route>
     <Route path="*"  element={<NotFound />} />
    </Route>
 ))

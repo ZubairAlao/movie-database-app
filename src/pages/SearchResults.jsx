@@ -53,7 +53,6 @@ export default function SearchResults() {
           variant={activeSection === 'movies' ? 'solid' : 'outline'}
           mr={2}
           mb={8}
-          
         >
           Movies
         </Button>
@@ -72,37 +71,41 @@ export default function SearchResults() {
         >
           People
         </Button>
-        {activeSection === 'movies' ? (
-          searchedMovies.map((movie) => (
-              <Card key={movie.id}
-                imageSrc={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                title={movie.title}
-                releaseDate={movie.release_date}
-                ratings={Math.round((movie.vote_average / 10) * 100) + "%"}
-                link={`/movie/${movie.id}`}
-              />
-          ))
-        ) : activeSection === 'tvShows' ? (
-          searchedTVShows.map((tvShow) => (
-              <Card key={tvShow.id}
-                imageSrc={`https://image.tmdb.org/t/p/w500${tvShow.poster_path}`}
-                title={tvShow.name}
-                releaseDate={tvShow.first_air_date}
-                ratings={Math.round((tvShow.vote_average / 10) * 100) + "%"}
-                link={`/tv/${tvShow.id}`}
-              />
-          ))
-        ) : activeSection === 'people' ? (
-          searchedPeople.map((person) => (
-              <Card key={person.id}
-                imageSrc={`https://image.tmdb.org/t/p/w500${person.profile_path}`}
-                title={person.name}
-                link={`/people/${person.id}`}
-              />
-          ))
-        ) : (
-          <p>Loading media data...</p>
-        )}
+        <Box display="grid"
+          gridTemplateColumns={{base: "1fr", sm: "repeat(2,minmax(0,1fr))", md: "repeat(4,minmax(0,1fr))",  lg: "repeat(5,minmax(0,1fr))"}}
+          gridGap={8} mt={8}>
+            {activeSection === 'movies' ? (
+              searchedMovies.map((movie) => (
+                  <Card key={movie.id}
+                    imageSrc={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                    name={movie.title}
+                    releaseDate={movie.release_date}
+                    ratings={Math.round((movie.vote_average / 10) * 100) + "%"}
+                    link={`/movie/${movie.id}`}
+                  />
+              ))
+            ) : activeSection === 'tvShows' ? (
+              searchedTVShows.map((tvShow) => (
+                  <Card key={tvShow.id}
+                    imageSrc={`https://image.tmdb.org/t/p/w500${tvShow.poster_path}`}
+                    title={tvShow.name}
+                    releaseDate={tvShow.first_air_date}
+                    ratings={Math.round((tvShow.vote_average / 10) * 100) + "%"}
+                    link={`/tv/${tvShow.id}`}
+                  />
+              ))
+            ) : activeSection === 'people' ? (
+              searchedPeople.map((person) => (
+                  <Card key={person.id}
+                    imageSrc={`https://image.tmdb.org/t/p/w500${person.profile_path}`}
+                    title={person.name}
+                    link={`/people/${person.id}`}
+                  />
+              ))
+            ) : (
+              <p>Loading media data...</p>
+            )}
+        </Box>
       </Box>
     </FullScreenSection>
   );

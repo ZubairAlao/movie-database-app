@@ -25,6 +25,7 @@ export default function PopularPeople() {
                 key={person.id}
                 imageSrc={`https://image.tmdb.org/t/p/w500${person.profile_path}`}
                 name={person.name}
+                ratings={Math.floor(person.popularity)}
                 link={`${person.id}`}
             />
         ))

@@ -1,8 +1,6 @@
 import React from "react";
 import { Box, Image, Text } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
 import {
   Menu,
   MenuButton,
@@ -10,7 +8,7 @@ import {
   MenuItem,
 } from '@chakra-ui/react';
 
-const Card = ({ imageSrc, title, name, releaseDate, ratings, FirstAirDate, popularity, link }) => {
+const Card = ({ imageSrc, name, releaseDate, ratings, popularity, link }) => {
   return (
     <Box
       maxW="xs"
@@ -24,7 +22,7 @@ const Card = ({ imageSrc, title, name, releaseDate, ratings, FirstAirDate, popul
     >
       <Link to={link} style={{ textDecoration: 'none', display: 'block' }}>
 
-        <Image src={imageSrc} alt={title} width="xs" height="auto" />
+        <Image src={imageSrc} alt={name} width="xs" height="auto" />
 
         {/* Absolute positioning for the rating badge */}
         <Box
@@ -44,38 +42,14 @@ const Card = ({ imageSrc, title, name, releaseDate, ratings, FirstAirDate, popul
 
         <Box p="2"> {/* Adjust the padding as needed */}
           <Text fontWeight="semibold" fontSize="lg" noOfLines={1}>
-            {title}
             {name}
           </Text>
 
           <Text fontSize="sm" mb="2">
             {releaseDate}
-            {FirstAirDate}
           </Text>
         </Box>
       </Link>
-
-      {/* FontAwesome icon for the three dots */}
-      <Box
-        position="absolute"
-        top="3"
-        right="3"
-        p="2"
-        borderRadius="full"
-        bg="gray.300"
-        _hover={{
-          backgroundColor: 'gray.400',
-        }}
-      >
-        <Menu>
-            <MenuButton>
-              <FontAwesomeIcon icon={faEllipsisV} size="xs" />
-            </MenuButton>
-            <MenuList>
-                <MenuItem>Add Favorite</MenuItem>
-            </MenuList>
-          </Menu>
-      </Box>
     </Box>
   );
 };

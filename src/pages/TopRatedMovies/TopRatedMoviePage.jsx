@@ -1,5 +1,5 @@
-import { 
-  Heading, 
+import {
+  Heading,
   Box,
   Center,
   Select,
@@ -36,7 +36,7 @@ export default function TopRatedMoviePage() {
               <Card
                 key={movie.id}
                 imageSrc={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                title={movie.title}
+                name={movie.title}
                 releaseDate={formattedReleaseDate}
                 ratings={percentageScore + "%"}
                 link={`${movie.id}`}

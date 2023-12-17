@@ -6,7 +6,7 @@ import {
  import { faSun, faMoon } from '@fortawesome/free-solid-svg-icons';
  import MovieMazeLogo from '../img/moviemaze-logo.png';
 import { useColorMode, useColorModeValue, Box, HStack, Button, Image, Flex } from "@chakra-ui/react";
-import { NavLink, Link, useLocation } from 'react-router-dom';
+import { NavLink, Link, useLocation, useNavigate } from 'react-router-dom';
 import SearchBar from "./SearchBar";
 import {
     Drawer,
@@ -25,6 +25,8 @@ import {
     MenuList,
     MenuItem,
   } from '@chakra-ui/react'
+  import { auth } from "../services/firebase";
+  import {signOut} from 'firebase/auth'
 
 
 // MovieMaze
@@ -34,6 +36,7 @@ export default function Header() {
     const color = useColorModeValue('#333333', '#FFFFFF')
     const location = useLocation();
     const headerRef = useRef(null);
+    const navigate = useNavigate();
     
     // chakra drawer
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -74,7 +77,20 @@ export default function Header() {
         return () => {
             window.removeEventListener('scroll', handleScroll)
         }
+
+
     }, []);
+
+    const logout = async () => {
+        try {
+          await signOut(auth);
+          navigate('/');
+          localStorage.removeItem("loggedin")
+        console.log(auth);
+        } catch (err) {
+          console.error(err);
+        }
+      };
 
 
   return (
@@ -138,9 +154,9 @@ export default function Header() {
                                     </MenuList>
                                 </Menu>
                                 <NavLink style={({isActive}) => isActive ? activeStyle : null} to="/people">People</NavLink>
-                                <NavLink to="/login">
+                                {/* <NavLink to="/login">
                                         Login
-                                </NavLink>
+                                </NavLink> */}
                         </HStack>
                         <Drawer
                             isOpen={isOpen}
@@ -182,9 +198,9 @@ export default function Header() {
                                         </MenuList>
                                     </Menu>
                                     <Link onClick={() => {onClose(); }} to="/people">People</Link>
-                                    <Link onClick={() => {onClose(); }} to="/login">
+                                    {/* <Link onClick={() => {onClose(); }} to="/login">
                                             Login
-                                    </Link>
+                                    </Link> */}
                                 </DrawerBody>
                                 </DrawerContent>
                             </Drawer>
@@ -193,7 +209,34 @@ export default function Header() {
                     <Button ref={btnRef}  color={color}  onClick={onOpen} display={{ base: "block", lg: "none" }}>
                         <FontAwesomeIcon icon={faBars}  />
                     </Button>
-                    <FontAwesomeIcon icon={faUser} />
+
+                    <Menu>
+                        <MenuButton as={Button} rightIcon={<FontAwesomeIcon icon={faChevronDown} />}>
+                            {auth.currentUser ? auth.currentUser.email.charAt(0).toUpperCase() : <FontAwesomeIcon icon={faUser} />}
+                        </MenuButton>
+                        <MenuList>
+                            {auth.currentUser ?
+                                <>
+                                    <MenuItem>
+                                        <Link to="/user-profile">User Profile</Link>
+                                    </MenuItem>
+                                    <MenuItem onClick={logout}>
+                                        Logout
+                                    </MenuItem>
+                                </>
+                                :
+                                <>
+                                    <MenuItem>
+                                        <Link to="/login">Login</Link>
+                                    </MenuItem>
+                                    <MenuItem>
+                                        <Link to="/register">Register</Link>
+                                    </MenuItem>
+                                </>
+                            }
+                        </MenuList>
+                    </Menu>
+                    
                     <SearchBar />
                     <Button onClick={toggleColorMode}>
                         {colorMode === 'light' ? (
