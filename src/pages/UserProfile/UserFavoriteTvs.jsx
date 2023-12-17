@@ -71,7 +71,7 @@ export default function UserFavoriteTvs() {
                   name={movie.title}
                   releaseDate={formattedReleaseDate}
                   ratings={percentageScore + "%"}
-                  link={`/tv/${tvShow.movieId}`}
+                  link={`/tv/${movie.movieId}`}
                 />
 
                 <Box
