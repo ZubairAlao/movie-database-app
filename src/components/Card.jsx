@@ -1,12 +1,7 @@
 import React from "react";
 import { Box, Image, Text } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import {
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-} from '@chakra-ui/react';
+
 
 const Card = ({ imageSrc, name, releaseDate, ratings, popularity, link }) => {
   return (
