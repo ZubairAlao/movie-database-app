@@ -21,6 +21,7 @@ import { addFavoriteMovie, auth } from "../../services/firebase";
 import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
 import { getFavoriteMovies } from "../../services/firebase";
 import { deleteMovie } from "../../services/firebase";
+import { useState, useEffect } from "react";
 
 
 export function loader() {
@@ -29,7 +30,8 @@ export function loader() {
 
 export default function PopularMoviesPage() {
     const dataPromise = useLoaderData();
-    // console.log(dataPromise.movies);
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
     const [movieList, setMovieList] = React.useState(null);
     const userId = auth.currentUser?.uid;
 
@@ -41,6 +43,19 @@ export default function PopularMoviesPage() {
             console.error('Error fetching data:', error);
         }
     };
+
+    // useEffect to automatically hide the alert after a certain time
+    useEffect(() => {
+        if (showAlert) {
+        const timeoutId = setTimeout(() => {
+            setShowAlert(false);
+            setAlertMessage(''); // Clear the message after hiding
+        }, 3000);
+
+        // Clear the timeout when the component unmounts or showAlert changes
+        return () => clearTimeout(timeoutId);
+        }
+    }, [showAlert]);
 
     React.useEffect(() => {
         fetchFavoriteMovies();
@@ -73,12 +88,16 @@ export default function PopularMoviesPage() {
                   movieList.some((favMovie) => favMovie.movieId === movie.id)
                 ) {
                   // Movie is in favorites, delete it
-                   await deleteMovie(movie.id, userId);
-                   fetchFavoriteMovies();
+                    await deleteMovie(movie.id, userId);
+                    fetchFavoriteMovies();
+                    setAlertMessage('Removed from favorites!');
+                    setShowAlert(true);
                 } else {
                   // Movie is not in favorites, add it
                   await addFavoriteMovie(userId, movieData);
                   fetchFavoriteMovies();
+                  setAlertMessage('Added to favorites!');
+                    setShowAlert(true);
                 }
               };
   
@@ -103,6 +122,7 @@ export default function PopularMoviesPage() {
                     _hover={{
                     backgroundColor: 'gray.400',
                     }}
+                    zIndex="1"
                 >
                     <Menu>
                         <MenuButton>
@@ -149,18 +169,23 @@ export default function PopularMoviesPage() {
             p={8}
         >
             <Box>
+            {showAlert && (
+                <Box
+                    style={{
+                        position: 'absolute',
+                        top: '10px',
+                        right: '10px',
+                        // background: 'yellow',
+                        padding: '20px',
+                        fontSize: "1.1rem",
+                        borderRadius: '5px',
+                        boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.3)',
+                    }}
+                >
+                {alertMessage}
+                </Box>
+            )}
                 <Heading size="md" pb={4}>Popular Movies</Heading>
-                <Menu>
-                    <MenuButton as={Button} rightIcon={<FontAwesomeIcon icon={faChevronDown} />}>
-                        Sort
-                    </MenuButton>
-                    <MenuList>
-                        <MenuItem>Popularity Ascending</MenuItem>
-                        <MenuItem>Popularity Descending</MenuItem>
-                        <MenuItem>Rating Ascending</MenuItem>
-                        <MenuItem>Rating Descending</MenuItem>
-                    </MenuList>
-                </Menu>
                 <React.Suspense fallback={
                     <Center h="50vh">
                         <FontAwesomeIcon icon={faSpinner} size="7x" />

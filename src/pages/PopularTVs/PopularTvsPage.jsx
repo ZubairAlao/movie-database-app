@@ -2,7 +2,6 @@ import {
   Heading,
   Box,
   Center,
-  Select
 } from "@chakra-ui/react";
 import React from 'react';
 import { fetchMediaData } from '../../api';
@@ -19,6 +18,7 @@ import {
 } from '@chakra-ui/react';
 import { addFavoriteTVShow, auth, getFavoriteTvs, deleteTvs } from "../../services/firebase";
 import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
+import { useState, useEffect } from "react";
 
 export function loader(sortOrder) {
     return defer({ movies: fetchMediaData('popularTvs', sortOrder) });
@@ -30,6 +30,9 @@ export default function PopularTvsPage() {
     const [tvList, setTvList] = React.useState(null);
     const userId = auth.currentUser?.uid;
 
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+
     const fetchFavoriteTvs = async () => {
         try {
             const favoriteTvs = await getFavoriteTvs(userId);
@@ -38,6 +41,18 @@ export default function PopularTvsPage() {
             console.error('Error fetching data:', error);
         }
     };
+
+    useEffect(() => {
+        if (showAlert) {
+        const timeoutId = setTimeout(() => {
+            setShowAlert(false);
+            setAlertMessage(''); // Clear the message after hiding
+        }, 3000);
+
+        // Clear the timeout when the component unmounts or showAlert changes
+        return () => clearTimeout(timeoutId);
+        }
+    }, [showAlert]);
 
     React.useEffect(() => {
         fetchFavoriteTvs();
@@ -69,10 +84,14 @@ export default function PopularTvsPage() {
                   // Movie is in favorites, delete it
                    await deleteTvs(movie.id, userId);
                    fetchFavoriteTvs();
+                   setAlertMessage('Removed from favorites!');
+                    setShowAlert(true);
                 } else {
                   // Movie is not in favorites, add it
                   await addFavoriteTVShow(userId, tvShowData);
                   fetchFavoriteTvs();
+                  setAlertMessage('Added to favorites!');
+                    setShowAlert(true);
                 }
               };
 
@@ -146,11 +165,23 @@ export default function PopularTvsPage() {
             p={8}
         >
             <Box>
+            {showAlert && (
+                <Box
+                    style={{
+                        position: 'absolute',
+                        top: '10px',
+                        right: '10px',
+                        // background: 'yellow',
+                        padding: '20px',
+                        fontSize: "1.1rem",
+                        borderRadius: '5px',
+                        boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.3)',
+                    }}
+                >
+                {alertMessage}
+                </Box>
+            )}
                 <Heading size="md" pb={4}>Popular TVs</Heading>
-                <Select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)} mb={4}>
-                    <option value="desc">Popularity Descending</option>
-                    <option value="asc">Popularity Ascending</option>
-                </Select>
                 <React.Suspense fallback={
                     <Center h="50vh">
                         <FontAwesomeIcon icon={faSpinner} size="7x" />

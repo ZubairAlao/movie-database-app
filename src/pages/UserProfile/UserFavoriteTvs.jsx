@@ -15,6 +15,8 @@ import { faEllipsisV } from "@fortawesome/free-solid-svg-icons";
 import { getFavoriteTvs } from '../../services/firebase';
 
 export default function UserFavoriteTvs() {
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
   const [tvList, setTvList] = useState(null);
   const userId = auth.currentUser?.uid; // Using optional chaining for safety
 
@@ -31,7 +33,17 @@ export default function UserFavoriteTvs() {
     fetchFavoriteTvs();
   }, [userId]);
 
-  
+  useEffect(() => {
+    if (showAlert) {
+    const timeoutId = setTimeout(() => {
+        setShowAlert(false);
+        setAlertMessage(''); // Clear the message after hiding
+    }, 3000);
+
+    // Clear the timeout when the component unmounts or showAlert changes
+    return () => clearTimeout(timeoutId);
+    }
+  }, [showAlert]);
 
   return (
     <FullScreenSection
@@ -43,7 +55,22 @@ export default function UserFavoriteTvs() {
       spacing={4}
       p={8}
     >
-
+        {showAlert && (
+        <Box
+          style={{
+              position: 'absolute',
+              top: '10px',
+              right: '10px',
+              // background: 'yellow',
+              padding: '20px',
+              fontSize: "1.1rem",
+              borderRadius: '5px',
+              boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.3)',
+          }}
+        >
+        {alertMessage}
+        </Box>
+      )}
         <Box
           display="grid"
           gridTemplateColumns={{ base: "1fr", sm: "repeat(2, minmax(0, 1fr))", md: "repeat(4, minmax(0, 1fr))", lg: "repeat(5, minmax(0, 1fr))" }}
@@ -60,6 +87,8 @@ export default function UserFavoriteTvs() {
             const handleDeleteFavoriteTvs = async () => {
               await deleteTvs(movie.movieId, userId);
               fetchFavoriteTvs();
+              setAlertMessage('Removed from favorites!');
+              setShowAlert(true);
             }
 
             const percentageScore = Math.round((movie.rating/10) * 100)
@@ -103,7 +132,7 @@ export default function UserFavoriteTvs() {
             );
             })
           ) : (
-            <Link to="/tv"> <Text color='blue'> No Tv Shows yet. Discover some Tvs!</Text></Link>
+            <Text>No Tv Shows yet. <Link style={{ textDecoration: 'underline' }} to="/tv">Discover some Tvs!</Link></Text>
           )}
         </Box>
     </FullScreenSection>

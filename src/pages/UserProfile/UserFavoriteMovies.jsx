@@ -18,7 +18,8 @@ import { getFavoriteMovies } from '../../services/firebase';
 export default function UserFavoriteMovies() {
   const [movieList, setMovieList] = useState(null);
   const userId = auth.currentUser?.uid; // Using optional chaining for safety
-  console.log(movieList);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
 
   const fetchFavoriteMovies = async () => {
     try {
@@ -28,6 +29,18 @@ export default function UserFavoriteMovies() {
       console.error('Error fetching data:', error);
     }
   };
+
+  useEffect(() => {
+    if (showAlert) {
+    const timeoutId = setTimeout(() => {
+        setShowAlert(false);
+        setAlertMessage(''); // Clear the message after hiding
+    }, 3000);
+
+    // Clear the timeout when the component unmounts or showAlert changes
+    return () => clearTimeout(timeoutId);
+    }
+  }, [showAlert]);
 
   useEffect(() => {
     fetchFavoriteMovies();
@@ -45,8 +58,23 @@ export default function UserFavoriteMovies() {
       spacing={4}
       p={8}
     >
-
+      {showAlert && (
         <Box
+          style={{
+              position: 'absolute',
+              top: '10px',
+              right: '10px',
+              // background: 'yellow',
+              padding: '20px',
+              fontSize: "1.1rem",
+              borderRadius: '5px',
+              boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.3)',
+          }}
+        >
+        {alertMessage}
+        </Box>
+      )}
+      <Box
           display="grid"
           gridTemplateColumns={{ base: "1fr", sm: "repeat(2, minmax(0, 1fr))", md: "repeat(4, minmax(0, 1fr))", lg: "repeat(5, minmax(0, 1fr))" }}
           gap={4}
@@ -62,6 +90,8 @@ export default function UserFavoriteMovies() {
             const handleDeleteFavoriteMovie = async () => {
               await deleteMovie(movie.movieId, userId);
               fetchFavoriteMovies();
+              setAlertMessage('Removed from favorites!');
+              setShowAlert(true);
             }
 
             const percentageScore = Math.round((movie.rating/10) * 100)
@@ -105,7 +135,7 @@ export default function UserFavoriteMovies() {
             );
             })
           ) : (
-            <Link to="/movie"> <Text color='blue'> No movies yet. Discover some movies!</Text></Link>
+             <Text>No movies yet. <Link style={{ textDecoration: 'underline' }} to="/movie">Discover some movies!</Link></Text>
           )}
         </Box>
     </FullScreenSection>
