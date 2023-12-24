@@ -61,7 +61,7 @@ export default function UserFavoriteTvs() {
               position: 'absolute',
               top: '10px',
               right: '10px',
-              // background: 'yellow',
+              zIndex: 1,
               padding: '20px',
               fontSize: "1.1rem",
               borderRadius: '5px',

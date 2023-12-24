@@ -64,11 +64,11 @@ export default function UserFavoriteMovies() {
               position: 'absolute',
               top: '10px',
               right: '10px',
-              // background: 'yellow',
+              zIndex: 1,
               padding: '20px',
               fontSize: "1.1rem",
               borderRadius: '5px',
-              boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.3)',
+              boxShadow: '0px 0px 10px r gba(0, 0, 0, 0.3)',
           }}
         >
         {alertMessage}
