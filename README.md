@@ -91,7 +91,7 @@ Movie Maze is a web application built with React and Chakra UI, designed to prov
 ![Add Favorite](./src/img/add-favorite.jpg)
 
 ### User Favorite Page
-![User Favorite Page](./src/img/add-favorite.jpg)
+![User Favorite Page](./src/img/userfavorite-page.jpg)
 
 ## Tech Stack
 
